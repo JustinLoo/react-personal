@@ -1,70 +1,39 @@
-# Getting Started with Create React App
+# React Portfolio Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a single-page portfolio website built using React.js, styled with CSS, and enhanced with various animations and effects. The goal of this project is to create a smooth and modern interface for showcasing projects, skills, and contact information.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Smooth Scrolling**: The website utilizes smooth scrolling to create a seamless navigation experience.
+- **Responsive Design**: The website is fully responsive, adapting to different screen sizes with custom media queries.
+- **Scroll Animations**: The ScrollReveal.js library is used to create engaging animations as elements enter the viewport.
+- **Interactive Icons**: Includes interactive social media icons with hover effects.
+- **3D Rotating Cube**: A CSS-based 3D rotating cube for added visual interest.
+- **Mobile Friendly**: Optimized for smaller screens, with adjustments made for font sizes, padding, and layout to ensure readability on mobile devices.
 
-### `npm start`
+## Technologies Used
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **React.js**: The core library used for building the user interface.
+- **CSS**: Custom styling is applied through a CSS file with media queries for responsiveness.
+- **Bootstrap**: Used for layout structure, particularly the grid system.
+- **ScrollReveal.js**: A JavaScript library for animating elements on scroll.
+- **Hover.css**: A CSS library for adding hover effects on links and icons.
+- **Font Awesome**: Icons used for social media links and email.
+- **HTML/CSS**: Basic layout and structure.
+  
+## Assets
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Images**: Various images like `background.jpg`, `pastwebsite.png`, `profile.jpg`, and more are used to enhance the visual design of the website.
+- **Custom Fonts**: Figtree font is imported for text styling.
 
-### `npm test`
+## Components
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **App.js**: The main React component that renders the entire portfolio website.
+- **Row & Column Components**: Used to structure the layout in a flexible grid system.
+- **Box Component**: Renders different sections like the profile section, skills, and about information.
 
-### `npm run build`
+## Installation & Setup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/yourusername/your-repo-name.git
