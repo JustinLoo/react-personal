@@ -1,38 +1,193 @@
-.App {
-  text-align: center;
+/* App.css */
+.center-container {
+  height: 100%;
+  width: 70%;  /* Width of the center container */
+ 
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html {
+  scroll-behavior: smooth;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+
+@media (max-width: 768px) {
+  .center-container {
+    width: 90%; /* 100% width for smaller screens */
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* On smaller screens, ensure the brand is centered */
+@media (max-width: 768px) {
+  .navbar-brand {
+    text-align: center;
+    width: 100%; /* Ensure it's centered within the navbar */
+  }
+}
+
+
+@media (max-width: 768px) {
+  .box-container h1 {
+    font-size: 0.5rem; /* Smaller heading for medium screens */
+  }
+
+  .box-container p {
+    font-size: 0.5rem; /* Smaller paragraph for medium screens */
+  }
+}
+
+/* Further reduce font size on small screens (phones, 576px and below) */
+@media (max-width: 576px) {
+  .box-container h1 {
+    font-size: 1.5rem !important; /* Even smaller heading for small screens */
+  }
+
+  .box-container p {
+    font-size: 0.875rem; /* Smaller paragraph for small screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .icon-container a {
+    padding-top: 15px; /* Smaller top padding for tablets */
+    margin: 10px 10px; /* Smaller top and side margins on tablets */
+  }
+}
+
+.icons {
+  margin-top: 70px;
+
+
+}
+
+/* On small screens (576px and below), set margin-top to 0 and reduce padding-top */
+@media (max-width: 576px) {
+  .icon-container a {
+    padding-top: 1px !important; /* Smaller top padding for mobile phones */
+    margin-top: 0 !important; /* Remove margin-top on mobile phones */
+    margin-right: 5px !important;
+    margin-left: 5px !important; /* Maintain smaller side margins */
+  }
+
+  .icons{
+    padding-top: 1px !important; /* Smaller top padding for mobile phones */
+    margin-top: 0 !important; /* Remove margin-top on mobile phones */
+    margin-right: 5px !important;
+    margin-left: 5px !important; /* Maintain smaller side margins */
+
+
+  }
+}
+
+
+@media (max-width: 576px) {
+  .box-container {
+    padding: 1px !important; /* Further reduce padding on very small screens */
+  }
+}
+
+
+#root{
+  background-color: black !important;
+  
+
+  font-family: 'Figtree', sans-serif !important;
+}
+
+
+
+
+
+/* Prevent horizontal overflow */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: black !important;
+}
+
+/* Optional: Ensure all containers take up the full width of the screen */
+.container-fluid {
+  width: 100%;
+  padding: 0; /* Remove padding that could cause horizontal scroll */
+}
+
+
+
+.navbar-links li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.navbar-links li a:hover {
+  text-decoration: underline;
+}
+
+.title{
+
+  height: 150px;
+  
+}
+
+.name{
+  animation: effect 2s linear infinite;
+
+  
+}
+
+/* Container for the cube */
+.cube {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  transform-style: preserve-3d;
+  animation: rotateCube 50s infinite linear;
+}
+
+/* Each face of the cube */
+.face {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background-image: url('download.png');
+  border: 2px solid #333;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  font-size: 20px;
+  color: #000;
 }
 
-.App-link {
-  color: #61dafb;
+/* Positioning the faces of the cube */
+.front {
+  transform: translateZ(75px);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.back {
+  transform: rotateY(180deg) translateZ(75px);
+}
+
+.left {
+  transform: rotateY(-90deg) translateZ(75px);
+}
+
+.right {
+  transform: rotateY(90deg) translateZ(75px);
+}
+
+.top {
+  transform: rotateX(90deg) translateZ(75px);
+}
+
+.bottom {
+  transform: rotateX(-90deg) translateZ(75px);
+}
+
+/* 3D rotation animation */
+@keyframes rotateCube {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg);
   }
-  to {
-    transform: rotate(360deg);
+  100% {
+    transform: rotateX(360deg) rotateY(360deg);
   }
 }
+
