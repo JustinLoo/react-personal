@@ -51,12 +51,12 @@ function App() {
   const projectRows = chunkProjects(projects, 2);
 
   useEffect(() => {
-    // OPTIMIZATION: Created a base configuration for smoother performance
+    // SCROLL REVEAL CONFIG
     const sr = ScrollReveal({
-      reset: false,   // Set to false to prevent re-animating (saves resources)
-      mobile: true,   // Ensure it works on mobile
-      viewFactor: 0.2, // Elements reveal as soon as 20% is visible
-      delay: 100,      // Slight delay to allow images to render first
+      reset: false,   
+      mobile: true,   
+      viewFactor: 0.2, 
+      delay: 100,      
     });
 
     sr.reveal(".slide-from-top", { duration: 1500, distance: "50px", origin: "top" });
@@ -69,35 +69,36 @@ function App() {
   }, []);
 
   return (
-    <div className="App d-flex flex-column align-items-center justify-content-start min-vh-100" style={{ overflowX: "hidden" }}>
+    /* FIX: Removed style={{overflowX: 'hidden'}} from here to prevent iPhone scroll lock */
+    <div className="App d-flex flex-column align-items-center justify-content-start min-vh-100">
       
       <style>
         {`
-          /* --- PERFORMANCE OPTIMIZATIONS --- */
-          /* Tells the browser to prepare the GPU for these animations */
+          /* FIX: Apply overflow-x hidden to body instead of wrapper to fix iOS scroll */
+          body, html {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+          }
+
+          /* --- ANIMATION PERFORMANCE --- */
+          /* Using translateZ(0) engages the GPU without locking up the main thread */
           .slide-from-top, 
           .slide-from-left, 
           .slide-from-right, 
-          .slide-from-bottom, 
-          .slide-from-left-delay, 
-          .slide-from-right-delay {
-             will-change: transform, opacity;
-             -webkit-backface-visibility: hidden;
-             backface-visibility: hidden;
-             transform: translateZ(0); /* Hardware acceleration hack */
+          .slide-from-bottom {
+             transform: translateZ(0); 
+             -webkit-font-smoothing: antialiased;
           }
 
           .project-card {
-            /* OPTIMIZATION: Only animate specific properties, not "all" */
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
             cursor: pointer;
             border-radius: 25px; 
             position: relative;
             overflow: hidden; 
             background-color: #000; 
-            /* GPU promoting */
             transform: translateZ(0);
-            -webkit-transform: translateZ(0);
             isolation: isolate;
           }
           
@@ -108,12 +109,11 @@ function App() {
           }
 
           .project-card img {
-            transition: transform 0.6s ease; /* Only animate transform */
+            transition: transform 0.6s ease;
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 25px; 
-            will-change: transform;
           }
           .project-card:hover img {
             transform: scale(1.05); 
@@ -132,7 +132,7 @@ function App() {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: background 0.4s ease, backdrop-filter 0.4s ease; /* Specific transitions */
+            transition: background 0.4s ease;
             z-index: 2;
           }
 
@@ -299,7 +299,8 @@ function App() {
                 backgroundSize: "200% 200%", 
                 backgroundPosition: "center",
                 width: "100%", 
-                height: "100vh" 
+                // FIX: Changed from height:100vh to minHeight:100vh to prevent content clipping
+                minHeight: "100vh" 
               }}
             >
               <div className="fluent-in-container d-flex flex-column justify-content-center align-items-center">
