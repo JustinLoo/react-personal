@@ -8,7 +8,7 @@ import ScrollReveal from "scrollreveal";
 
 // Components
 import Row from "./components/Row";
-import Column from "./components/Column";
+import Column from "./components/Column"; // We will bypass this for the projects to force custom grid
 import Box from "./components/Box";
 
 // General Images
@@ -61,7 +61,6 @@ function App() {
   }, []);
 
   return (
-    // FIX: Removed container-fluid here to prevent edge-to-edge stretching
     <div className="App d-flex flex-column align-items-center justify-content-start min-vh-100" style={{ overflowX: "hidden" }}>
       
       <style>
@@ -136,17 +135,33 @@ function App() {
           .modal-content-box {
              height: 85vh; 
           }
+
+          /* --- MOBILE RESPONSIVENESS TWEAKS --- */
           @media (max-width: 768px) {
              .modal-content-box {
                 height: 95vh !important;
                 width: 95% !important;
              }
+
+             /* Force height to shrink on mobile so 2 cols look good */
+             .mobile-project-box {
+                height: 220px !important; 
+             }
+             
+             /* Shrink text on mobile */
+             .project-overlay h1 {
+                font-size: 1.1rem !important;
+                margin-bottom: 2px !important;
+             }
+             
+             .project-overlay p {
+                font-size: 0.75rem !important;
+                line-height: 1.1 !important;
+             }
           }
         `}
       </style>
 
-      {/* FIX: Changed "center-container w-100" to "container". 
-          This restricts width and adds margins on the sides. */}
       <div className="container text-white"> 
         
         {/* Title / Navbar */}
@@ -220,7 +235,8 @@ function App() {
               const animClass = colIndex === 0 ? "slide-from-left-delay" : "slide-from-right";
 
               return (
-                <Column size={6} key={project.id}>
+                // FIX: Use standard bootstrap 'col-6' to force 2 columns on mobile
+                <div className="col-6 mb-4" key={project.id}>
                   {/* Wrapper Strategy for animations */}
                   <div className={animClass}> 
                     <div 
@@ -228,7 +244,8 @@ function App() {
                       onClick={() => setActiveProject(project.id)}
                     >
                       <Box
-                        className="position-relative d-flex justify-content-center align-items-center"
+                        // FIX: Added 'mobile-project-box' class to control height via CSS
+                        className="position-relative d-flex justify-content-center align-items-center mobile-project-box"
                         sx={{ position: "relative", width: "100%", height: "400px" }}
                         bgColor="black"
                       >
@@ -236,16 +253,24 @@ function App() {
                           <h1 className="text-white text-center" style={{ fontSize: "1.8em", marginBottom: "10px" }}>
                             {project.cardTitle}
                           </h1>
-                          <p className="text-white text-center px-4" style={{ fontSize: "0.9em", color: "#ddd" }}>
+                          
+                          {/* Hide description on very small screens, show "Tap for details" instead */}
+                          <p className="text-white text-center px-2 d-none d-sm-block" style={{ fontSize: "0.9em", color: "#ddd" }}>
                             {project.cardDesc}
                             <span style={{fontSize: "0.8em", opacity: 0.9, marginTop:"10px", display:"block"}}>(Click for details)</span>
                           </p>
+                          
+                          {/* Mobile only text */}
+                          <p className="text-white text-center d-block d-sm-none" style={{ fontSize: "0.8em", color: "#ddd" }}>
+                            Tap to view
+                          </p>
+
                         </div>
                         <img src={project.images[0]} alt={project.title} className="img-fluid" />
                       </Box>
                     </div>
                   </div>
-                </Column>
+                </div>
               );
             })}
           </Row>
