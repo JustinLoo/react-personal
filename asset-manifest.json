@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/react/static/css/main.995aafa5.css",
+    "main.js": "/react/static/js/main.d246fec8.js",
+    "static/js/453.ed3810f9.chunk.js": "/react/static/js/453.ed3810f9.chunk.js",
+    "static/media/personal.jpg": "/react/static/media/personal.71b8b80966e05f0d26f9.jpg",
+    "static/media/swiss.jpg": "/react/static/media/swiss.a7d9adb13b8b25c19d52.jpg",
+    "static/media/pastwebsite.png": "/react/static/media/pastwebsite.543d065d62d4cd9df083.png",
+    "static/media/background.jpg": "/react/static/media/background.aae81640c15a0025a3bd.jpg",
+    "static/media/waver.png": "/react/static/media/waver.3b1335741073950b7079.png",
+    "static/media/schem.png": "/react/static/media/schem.f3c183249f58b6c5f588.png",
+    "static/media/bok.jpg": "/react/static/media/bok.0d1e4f005b0c76a8d092.jpg",
+    "static/media/layout.png": "/react/static/media/layout.002ca7b0fcd4be087784.png",
+    "static/media/sather.jpg": "/react/static/media/sather.bb3d9c4dc2271f8b73c4.jpg",
+    "static/media/p3.png": "/react/static/media/p3.d5ee48c3d19cdb29d6a2.png",
+    "static/media/amber.jpg": "/react/static/media/amber.525f54863034f80dda43.jpg",
+    "index.html": "/react/index.html",
+    "main.995aafa5.css.map": "/react/static/css/main.995aafa5.css.map",
+    "main.d246fec8.js.map": "/react/static/js/main.d246fec8.js.map",
+    "453.ed3810f9.chunk.js.map": "/react/static/js/453.ed3810f9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.995aafa5.css",
+    "static/js/main.d246fec8.js"
+  ]
+}
