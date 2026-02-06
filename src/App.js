@@ -8,7 +8,7 @@ import ScrollReveal from "scrollreveal";
 
 // Components
 import Row from "./components/Row";
-import Column from "./components/Column"; // We will bypass this for the projects to force custom grid
+import Column from "./components/Column"; 
 import Box from "./components/Box";
 
 // General Images
@@ -51,13 +51,21 @@ function App() {
   const projectRows = chunkProjects(projects, 2);
 
   useEffect(() => {
-    ScrollReveal().reveal(".slide-from-top", { duration: 1500, distance: "50px", origin: "top" });
-    ScrollReveal().reveal(".slide-from-left", { duration: 1500, distance: "100px", origin: "left" });
-    ScrollReveal().reveal(".slide-from-right", { duration: 1500, distance: "100px", origin: "right" });
-    ScrollReveal().reveal(".slide-from-right-delay", { duration: 2250, distance: "100px", origin: "right" });
-    ScrollReveal().reveal(".slide-from-left-delay", { duration: 2250, distance: "100px", origin: "left" });
-    ScrollReveal().reveal(".slide-from-bottom", { duration: 1500, distance: "100px", origin: "bottom" });
-    ScrollReveal().reveal(".fade-in", { duration: 1000, distance: "10px", origin: "bottom", reset: true });
+    // OPTIMIZATION: Created a base configuration for smoother performance
+    const sr = ScrollReveal({
+      reset: false,   // Set to false to prevent re-animating (saves resources)
+      mobile: true,   // Ensure it works on mobile
+      viewFactor: 0.2, // Elements reveal as soon as 20% is visible
+      delay: 100,      // Slight delay to allow images to render first
+    });
+
+    sr.reveal(".slide-from-top", { duration: 1500, distance: "50px", origin: "top" });
+    sr.reveal(".slide-from-left", { duration: 1500, distance: "100px", origin: "left" });
+    sr.reveal(".slide-from-right", { duration: 1500, distance: "100px", origin: "right" });
+    sr.reveal(".slide-from-right-delay", { duration: 2250, distance: "100px", origin: "right" });
+    sr.reveal(".slide-from-left-delay", { duration: 2250, distance: "100px", origin: "left" });
+    sr.reveal(".slide-from-bottom", { duration: 1500, distance: "100px", origin: "bottom" });
+    sr.reveal(".fade-in", { duration: 1000, distance: "10px", origin: "bottom" });
   }, []);
 
   return (
@@ -65,13 +73,29 @@ function App() {
       
       <style>
         {`
+          /* --- PERFORMANCE OPTIMIZATIONS --- */
+          /* Tells the browser to prepare the GPU for these animations */
+          .slide-from-top, 
+          .slide-from-left, 
+          .slide-from-right, 
+          .slide-from-bottom, 
+          .slide-from-left-delay, 
+          .slide-from-right-delay {
+             will-change: transform, opacity;
+             -webkit-backface-visibility: hidden;
+             backface-visibility: hidden;
+             transform: translateZ(0); /* Hardware acceleration hack */
+          }
+
           .project-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            /* OPTIMIZATION: Only animate specific properties, not "all" */
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
             cursor: pointer;
             border-radius: 25px; 
             position: relative;
             overflow: hidden; 
             background-color: #000; 
+            /* GPU promoting */
             transform: translateZ(0);
             -webkit-transform: translateZ(0);
             isolation: isolate;
@@ -84,11 +108,12 @@ function App() {
           }
 
           .project-card img {
-            transition: transform 0.6s ease;
+            transition: transform 0.6s ease; /* Only animate transform */
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 25px; 
+            will-change: transform;
           }
           .project-card:hover img {
             transform: scale(1.05); 
@@ -107,7 +132,7 @@ function App() {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: all 0.4s ease;
+            transition: background 0.4s ease, backdrop-filter 0.4s ease; /* Specific transitions */
             z-index: 2;
           }
 
@@ -136,24 +161,19 @@ function App() {
              height: 85vh; 
           }
 
-          /* --- MOBILE RESPONSIVENESS TWEAKS --- */
+          /* --- MOBILE RESPONSIVENESS --- */
           @media (max-width: 768px) {
              .modal-content-box {
                 height: 95vh !important;
                 width: 95% !important;
              }
-
-             /* Force height to shrink on mobile so 2 cols look good */
              .mobile-project-box {
                 height: 220px !important; 
              }
-             
-             /* Shrink text on mobile */
              .project-overlay h1 {
                 font-size: 1.1rem !important;
                 margin-bottom: 2px !important;
              }
-             
              .project-overlay p {
                 font-size: 0.75rem !important;
                 line-height: 1.1 !important;
@@ -235,16 +255,13 @@ function App() {
               const animClass = colIndex === 0 ? "slide-from-left-delay" : "slide-from-right";
 
               return (
-                // FIX: Use standard bootstrap 'col-6' to force 2 columns on mobile
                 <div className="col-6 mb-4" key={project.id}>
-                  {/* Wrapper Strategy for animations */}
                   <div className={animClass}> 
                     <div 
                       className="project-card"
                       onClick={() => setActiveProject(project.id)}
                     >
                       <Box
-                        // FIX: Added 'mobile-project-box' class to control height via CSS
                         className="position-relative d-flex justify-content-center align-items-center mobile-project-box"
                         sx={{ position: "relative", width: "100%", height: "400px" }}
                         bgColor="black"
@@ -253,18 +270,13 @@ function App() {
                           <h1 className="text-white text-center" style={{ fontSize: "1.8em", marginBottom: "10px" }}>
                             {project.cardTitle}
                           </h1>
-                          
-                          {/* Hide description on very small screens, show "Tap for details" instead */}
                           <p className="text-white text-center px-2 d-none d-sm-block" style={{ fontSize: "0.9em", color: "#ddd" }}>
                             {project.cardDesc}
                             <span style={{fontSize: "0.8em", opacity: 0.9, marginTop:"10px", display:"block"}}>(Click for details)</span>
                           </p>
-                          
-                          {/* Mobile only text */}
                           <p className="text-white text-center d-block d-sm-none" style={{ fontSize: "0.8em", color: "#ddd" }}>
                             Tap to view
                           </p>
-
                         </div>
                         <img src={project.images[0]} alt={project.title} className="img-fluid" />
                       </Box>
