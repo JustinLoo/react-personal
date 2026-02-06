@@ -23,15 +23,18 @@ import { projects } from "./projectData";
 
 function App() {
   const scrollToMiddle = () => {
+    // FIX: Use document.body to ensure it finds the correct height on mobile
+    const height = Math.max( document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight );
     window.scrollTo({
-      top: document.documentElement.scrollHeight / 4, 
+      top: height / 4, 
       behavior: "smooth", 
     });
   };
 
   const scrollToBottom = () => {
+    const height = Math.max( document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight );
     window.scrollTo({
-      top: document.documentElement.scrollHeight,
+      top: height,
       behavior: "smooth", 
     });
   };
@@ -51,48 +54,58 @@ function App() {
   const projectRows = chunkProjects(projects, 2);
 
   useEffect(() => {
-    // SCROLL REVEAL CONFIG
     const sr = ScrollReveal({
       reset: false,   
       mobile: true,   
-      viewFactor: 0.2, 
-      delay: 100,      
+      viewFactor: 0.1, 
+      delay: 0, 
+      duration: 800,
+      easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+      // FIX: Ensure elements are visible immediately if JS lags
+      cleanup: true 
     });
 
-    sr.reveal(".slide-from-top", { duration: 1500, distance: "50px", origin: "top" });
-    sr.reveal(".slide-from-left", { duration: 1500, distance: "100px", origin: "left" });
-    sr.reveal(".slide-from-right", { duration: 1500, distance: "100px", origin: "right" });
-    sr.reveal(".slide-from-right-delay", { duration: 2250, distance: "100px", origin: "right" });
-    sr.reveal(".slide-from-left-delay", { duration: 2250, distance: "100px", origin: "left" });
-    sr.reveal(".slide-from-bottom", { duration: 1500, distance: "100px", origin: "bottom" });
-    sr.reveal(".fade-in", { duration: 1000, distance: "10px", origin: "bottom" });
+    sr.reveal(".slide-from-top", { distance: "50px", origin: "top" });
+    sr.reveal(".slide-from-left", { distance: "50px", origin: "left" });
+    sr.reveal(".slide-from-right", { distance: "50px", origin: "right" });
+    sr.reveal(".slide-from-right-delay", { delay: 100, distance: "50px", origin: "right" });
+    sr.reveal(".slide-from-left-delay", { delay: 100, distance: "50px", origin: "left" });
+    sr.reveal(".slide-from-bottom", { distance: "50px", origin: "bottom" });
+    sr.reveal(".fade-in", { duration: 600, distance: "10px", origin: "bottom" });
   }, []);
 
   return (
-    /* FIX: Removed style={{overflowX: 'hidden'}} from here to prevent iPhone scroll lock */
     <div className="App d-flex flex-column align-items-center justify-content-start min-vh-100">
       
       <style>
         {`
-          /* FIX: Apply overflow-x hidden to body instead of wrapper to fix iOS scroll */
-          body, html {
-            overflow-x: hidden;
+          /* --- CRITICAL IOS SCROLL FIX --- */
+          /* We removed 'height: 100%' from here. This allows the body to grow naturally */
+          html, body {
+            overflow-x: hidden; /* Prevent side-scroll */
             width: 100%;
-            position: relative;
+            margin: 0;
+            padding: 0;
+            -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling */
+          }
+
+          /* Ensure the app wrapper doesn't restrict height either */
+          .App {
+             overflow-x: hidden;
+             width: 100%;
           }
 
           /* --- ANIMATION PERFORMANCE --- */
-          /* Using translateZ(0) engages the GPU without locking up the main thread */
           .slide-from-top, 
           .slide-from-left, 
           .slide-from-right, 
           .slide-from-bottom {
+             will-change: transform, opacity;
              transform: translateZ(0); 
-             -webkit-font-smoothing: antialiased;
           }
 
           .project-card {
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
             cursor: pointer;
             border-radius: 25px; 
             position: relative;
@@ -103,13 +116,13 @@ function App() {
           }
           
           .project-card:hover {
-            transform: translateY(-10px) translateZ(0); 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform: translateY(-5px) translateZ(0); 
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
             z-index: 10;
           }
 
           .project-card img {
-            transition: transform 0.6s ease;
+            transition: transform 0.5s ease;
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -132,15 +145,14 @@ function App() {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: background 0.4s ease;
+            transition: background 0.3s ease;
             z-index: 2;
           }
 
           .project-card:hover .project-overlay {
             background: rgba(0, 0, 0, 0.2); 
-            backdrop-filter: blur(8px); 
-            -webkit-backdrop-filter: blur(8px);
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px); 
+            -webkit-backdrop-filter: blur(5px);
           }
           
           .project-overlay h1, .project-overlay p {
@@ -161,7 +173,6 @@ function App() {
              height: 85vh; 
           }
 
-          /* --- MOBILE RESPONSIVENESS --- */
           @media (max-width: 768px) {
              .modal-content-box {
                 height: 95vh !important;
@@ -243,7 +254,13 @@ function App() {
           </Column>
           <Column size={4}>
             <Box bgColor="black" textColor="white" className="slide-from-right" >
-              <img src={profile} alt="Profile" style={{ width: "100%", height: "100%", objectFit: "cover" }}/>
+              <img 
+                src={profile} 
+                alt="Profile" 
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                // OPTIMIZATION: Critical images load eagerly
+                loading="eager" 
+              />
             </Box>
           </Column>
         </Row>
@@ -278,7 +295,13 @@ function App() {
                             Tap to view
                           </p>
                         </div>
-                        <img src={project.images[0]} alt={project.title} className="img-fluid" />
+                        {/* OPTIMIZATION: Lazy load project images so they don't block scrolling */}
+                        <img 
+                          src={project.images[0]} 
+                          alt={project.title} 
+                          className="img-fluid" 
+                          loading="lazy"
+                        />
                       </Box>
                     </div>
                   </div>
@@ -296,10 +319,10 @@ function App() {
               className="fluent-in-box d-flex justify-content-center align-items-center slide-from-right"
               bgImage={amberbg}
               style={{ 
-                backgroundSize: "200% 200%", 
+                // FIX: Cover stretches properly, minHeight allows scrolling
+                backgroundSize: "cover", 
                 backgroundPosition: "center",
                 width: "100%", 
-                // FIX: Changed from height:100vh to minHeight:100vh to prevent content clipping
                 minHeight: "100vh" 
               }}
             >
@@ -340,6 +363,7 @@ function App() {
                   objectFit: "cover", 
                   display: "block"
                 }} 
+                loading="lazy"
               />
             </Box>
           </Column>
@@ -444,7 +468,7 @@ function App() {
                   <div className="col-lg-5 mb-4 mb-lg-0 d-flex flex-column gap-4">
                     {currentModalData.images.map((imgSrc, index) => (
                       <div key={index} style={{ width: "100%", height: "250px", borderRadius: "16px", overflow: "hidden", border: "1px solid rgba(100, 200, 255, 0.3)", boxShadow: "0 5px 20px rgba(0,0,0,0.3)", position: "relative", flexShrink: 0 }}>
-                        <img src={imgSrc} alt={`Visual ${index + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "contrast(1.2)" }} />
+                        <img src={imgSrc} alt={`Visual ${index + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "contrast(1.2)" }} loading="lazy" />
                       </div>
                     ))}
                   </div>
